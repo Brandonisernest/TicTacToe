@@ -1,9 +1,3 @@
-/* 
-1. loop through each cell
-2. assign eventlistener to each one
-*/
-
-console.log("test");
 //global variables
 const gameCells = document.querySelectorAll(".cell");
 const playerChoices = ["X", "Y"];
@@ -12,18 +6,16 @@ const gameBtn = document.getElementById("game-btn");
 //
 
 function gameOver() {
-  alert("Game is over!");
-  //   gameStart();
-  //   gameHandler();
+  //winning message!
+  alert(`Game Over: Player ${choice} wins!`);
+  //clear the board
+  gameCells.forEach((cell) => {
+    cell.innerHTML = "";
+  });
 }
 
 //sets the cells
 function cellHandler(cell) {
-  //establish game order
-  //   gameOrder();
-
-  
-  //ossify player choice
   if (cell.innerHTML != "X" && cell.innerHTML != "Y") {
     cell.innerHTML = player;
     //switch to other player
@@ -31,11 +23,18 @@ function cellHandler(cell) {
   } else if (cell.innerHTML == "X") {
     //if value is in cell already...don't allow change
     //keep going
-    console.log("That spot is taken, try again");
+    console.log(
+      `That spot is taken, try again. Still Player ${player}'s turn'`
+    );
   } else if (cell.innerHTML == "Y") {
     //if value is in cell already don't allow change
-    console.log("That spot is taken, try again");
+    //keep going
+    console.log(
+      `That spot is taken, try again. Still Player ${player}'s turn'`
+    );
   }
+
+  winCondition();
 }
 
 function gameOrder() {
@@ -92,22 +91,15 @@ function winCondition() {
         _22.innerHTML == choice &&
         _13.innerHTML == choice)
     ) {
-      console.log(`Player ${choice} wins!`);
       gameOver();
     }
   }
 }
 
 function gameHandler() {
-  //establish game order
-//   gameOrder();
-  //
   gameCells.forEach((cell) => {
     cell.addEventListener("click", cellHandler.bind(this, cell));
   });
-
-  //check to see if win Condition is satisfied
-  winCondition();
 }
 
 function gameStart() {
@@ -133,18 +125,12 @@ function getRandomInt(max) {
 
 //execute functions
 gameBtn.addEventListener("click", gameStart);
-// gameHandler();
 
 //appendix
 // gameCells.forEach((cell)=> {
 //     cell.addEventListener("click", () => {
 //         cell.innerHTML = "Hi";
-//     });
+//     })
 // })
-
-//testing
-// for (let i = 0; i < 100; i++){
-//     console.log(getRandomInt(2));
-// }
 
 //Ask Henry: How to arrow functions work? why do they remove the need to "bind"?
