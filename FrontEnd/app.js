@@ -10,34 +10,29 @@ let player;
 const gameBtn = document.getElementById("game-btn");
 //
 
+function gameOver() {
+  alert("Game is over!");
+  //   gameStart();
+  //   gameHandler();
+}
+
 //sets the cells
 function cellHandler(cell) {
   //establish game order
   gameOrder();
   //ossify player choice
-  if (cell.innerHTML != "X" && cell.innerHTML != "Y") {
-    cell.innerHTML = player;
-  } else if (cell.innerHTML == "X") {
-    //if value is in cell already...don't allow change
-  } else if (cell.innerHTML == "Y") {
-    //if value is in cell already don't allow change
+  while (true) {
+    if (cell.innerHTML != "X" && cell.innerHTML != "Y") {
+      cell.innerHTML = player;
+      return false;
+    } else if (cell.innerHTML == "X") {
+      //if value is in cell already...don't allow change
+      console.log("That spot is taken, try again");
+    } else if (cell.innerHTML == "Y") {
+      //if value is in cell already don't allow change
+      console.log("That spot is taken, try again");
+    }
   }
-}
-
-function gameStart() {
-  //randomize starting player
-  if (getRandomInt(2) == 0) {
-    player = playerChoices[0];
-  } else {
-    player = playerChoices[1];
-  }
-  //clear the board
-  gameCells.forEach((cell) => {
-    cell.innerHTML = "";
-  });
-
-  //start game
-  gameHandler();
 }
 
 function gameOrder() {
@@ -46,20 +41,6 @@ function gameOrder() {
   } else {
     player = playerChoices[0];
   }
-}
-
-function gameHandler() {
-  gameCells.forEach((cell) => {
-    cell.addEventListener("click", cellHandler.bind(this, cell));
-  });
-
-  winCondition();
-}
-
-function gameOver() {
-  alert("Game is over!");
-  gameStart();
-  gameHandler();
 }
 
 function winCondition() {
@@ -113,6 +94,31 @@ function winCondition() {
     }
   }
 }
+
+function gameHandler() {
+  gameCells.forEach((cell) => {
+    cell.addEventListener("click", cellHandler.bind(this, cell));
+    //check to see if win Condition is satisfied
+    winCondition();
+  });
+}
+
+function gameStart() {
+  //randomize starting player
+  if (getRandomInt(2) == 0) {
+    player = playerChoices[0];
+  } else {
+    player = playerChoices[1];
+  }
+  //clear the board
+  gameCells.forEach((cell) => {
+    cell.innerHTML = "";
+  });
+
+  //start game
+  gameHandler();
+}
+
 //helper function
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
