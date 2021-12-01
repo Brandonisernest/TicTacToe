@@ -101,19 +101,6 @@ function gameHandler() {
   });
   //check to see if win Condition is satisfied
   winCondition();
-
-  while (true) {
-    if (cell.innerHTML != "X" && cell.innerHTML != "Y") {
-      cell.innerHTML = player;
-      return false;
-    } else if (cell.innerHTML == "X") {
-      //if value is in cell already...don't allow change
-      console.log("That spot is taken, try again");
-    } else if (cell.innerHTML == "Y") {
-      //if value is in cell already don't allow change
-      console.log("That spot is taken, try again");
-    }
-  }
 }
 
 function gameStart() {
