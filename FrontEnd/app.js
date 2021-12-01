@@ -3,6 +3,7 @@
 2. assign eventlistener to each one
 */
 
+console.log("test");
 //global variables
 const gameCells = document.querySelectorAll(".cell");
 const playerChoices = ["X", "Y"];
@@ -19,13 +20,17 @@ function gameOver() {
 //sets the cells
 function cellHandler(cell) {
   //establish game order
-  gameOrder();
+  //   gameOrder();
+
+  
   //ossify player choice
   if (cell.innerHTML != "X" && cell.innerHTML != "Y") {
     cell.innerHTML = player;
-    return false;
+    //switch to other player
+    gameOrder();
   } else if (cell.innerHTML == "X") {
     //if value is in cell already...don't allow change
+    //keep going
     console.log("That spot is taken, try again");
   } else if (cell.innerHTML == "Y") {
     //if value is in cell already don't allow change
@@ -94,11 +99,13 @@ function winCondition() {
 }
 
 function gameHandler() {
+  //establish game order
+//   gameOrder();
+  //
   gameCells.forEach((cell) => {
-    while (true) {
-      cell.addEventListener("click", cellHandler.bind(this, cell));
-    }
+    cell.addEventListener("click", cellHandler.bind(this, cell));
   });
+
   //check to see if win Condition is satisfied
   winCondition();
 }
@@ -141,12 +148,3 @@ gameBtn.addEventListener("click", gameStart);
 // }
 
 //Ask Henry: How to arrow functions work? why do they remove the need to "bind"?
-
-// const test = document.getElementById("1-1");
-// test.addEventListener("click", () => {
-//   console.log("hi");
-// });
-
-// for (choice of playerChoices){
-//     console.log(choice);
-// }
