@@ -1,20 +1,41 @@
-// SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity 0.8.10;
+
+
 
 contract TicTacToe {
-  ////test
-  address public owner = msg.sender;
-  uint public last_completed_migration;
 
-  modifier restricted() {
-    require(
-      msg.sender == owner,
-      "This function is restricted to the contract's owner"
-    );
-    _;
-  }
+    //enum and structs
+    //X = 0, Y = 1
+    enum possibleChoices {X, Y}
 
-  function setCompleted(uint completed) public restricted {
-    last_completed_migration = completed;
-  }
+    //variables
+    //owner
+    address public gameMaster;
+    //current address eligible to make a move
+    address public currentPlayer;
+    //Player mapping
+    mapping(address => bool) public playerRecord;
+    //numerical representation of X,Y
+    possibleChoices public currentChoice; 
+    // necessary?
+    possibleChoices constant defaultChoice = possibleChoices.X;
+
+
+    constructor() payable {
+        require(msg.value > 1 wei, "You need to PAY some WEI to PLAY!");
+        //set deployer as gameMaser
+        gameMaster = msg.sender;
+        //start game with X (defaultChoice)
+        currentChoice = defaultChoice;
+    }
+
+    //functions
+
+    function enterContract() public payable {
+        require(msg.value > 1 wei, "You need to PAY some WEI to PLAY!");
+
+
+    }
+    function clickCell() public {}
+    
 }

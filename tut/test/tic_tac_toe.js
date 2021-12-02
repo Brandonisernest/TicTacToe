@@ -40,7 +40,7 @@ contract("TicTacToe", function (accounts) {
   // Test win condition
   it("Should return win", async () => {
     await TicTacToe.winCondition();
-    return assert.isTrue(true)l
+    return assert.isTrue(true);
   });
 
   
