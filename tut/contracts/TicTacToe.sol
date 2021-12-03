@@ -38,10 +38,16 @@ contract TicTacToe {
     mapping(address => uint) public playerFundMapping;
     //What team does this player belong to?
     mapping(address => possibleChoices) public teamMapping;
+    //total players array
+    address[] public totalPlayersArray;
+    //team X addresses
+    address[] public teamXArray;
+    //team Y addresses
+    address[] public teamYArray;
     // Win/Loss mapping by player
     mapping(address => uint) public playerRecordMapping;
     //instnatiate possibleChoices enum for team assignment
-    possibleChoices public teamAssignment;
+    possibleChoices public teamAssignment = possibleChoices.X;
     //instantiate possibleChoices enum for gameOrder
     possibleChoices public currentChoice; 
     // necessary?
@@ -73,14 +79,21 @@ contract TicTacToe {
         //Get placed into team X or team Y
         if(teamPlacementCounter % 2 != 0){
             teamMapping[msg.sender] = teamAssignment;
+            //push player to team X Array
+            teamXArray.push(msg.sender);
             //set teamAssignment to Y
             teamAssignment = possibleChoices.Y;
         }
         else {
             teamMapping[msg.sender] = teamAssignment;
+            //push player to team Y Array
+            teamYArray.push(msg.sender);
             //set teamAssignment to X
             teamAssignment = possibleChoices.X;
         }
+        
+        //add to total players Array
+        totalPlayersArray.push(msg.sender);
         //increment teamPlacementCounter
         teamPlacementCounter++;
     }
@@ -133,6 +146,8 @@ contract TicTacToe {
 
         //emit event
         emit cellClickedEvent(_choice, _rowNum, _colNum);
+
+        winCondition();
     }
 
     //helper function
@@ -186,9 +201,23 @@ contract TicTacToe {
     function gameOver() public {
         //emit event that says game over!
         emit gameOverEvent("The game is over!");
+
+        //send funds to winning team
+
         //reset gameBoard
         clearGameBoard();
-        //send funds to winning team
+
+        //reset mappings
+        teamAssignment = possibleChoices.placeholder;
+        for(uint i = 0; i < totalPlayersArray.length; i++){
+
+            address currentAddress = totalPlayersArray[i];
+            playerBoolMapping[currentAddress] = false;
+            playerFundMapping[currentAddress] = 0;
+            teamMapping[currentAddress] = teamAssignment;
+
+        }
+        
     }
 
     function winCondition() public {
@@ -232,6 +261,8 @@ contract TicTacToe {
             winner = choiceY;
         }
 
+        gameOver();
+
     }
 
 
@@ -261,6 +292,18 @@ contract TicTacToe {
     //for unit testing purposes
     function getTeam(address _addr) public view returns(possibleChoices){
         return teamMapping[_addr];
+    }
+
+    //code out the transfer later....work on having a workable game first
+    function fundsHandler() public {
+        uint teamCount;
+
+        if(winner == possibleChoices.Y){
+            teamCount = teamYArray.length;
+        }
+        else if(winner == possibleChoices.X){
+            teamCount = teamXArray.length;
+        }
     }
     
 }
