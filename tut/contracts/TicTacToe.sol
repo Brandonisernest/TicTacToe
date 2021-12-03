@@ -103,7 +103,8 @@ contract TicTacToe {
         require(playerBoolMapping[msg.sender] == true, "You aren't eligible to play. Enter contract first!");
         require(_choice == possibleChoices.X || _choice == possibleChoices.Y,"Choose only between X and Y");
         //require that only teamX can go when it is X's turn and vice versa for Y
-        require(_choice == currentChoice, "Not your team's turn");
+        require(teamMapping[msg.sender] == _choice, "You can't do that");
+        require(teamMapping[msg.sender] == currentChoice, "Not your team's turn");
         //set spot on the grid to target
         cellChoices currentCellChoice;
         currentCellChoice = cellHandler(_rowNum, _colNum);
