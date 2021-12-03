@@ -93,6 +93,11 @@ contract("TicTacToe", function (accounts) {
     let colVal = 3;
     let choiceVal = 1;
 
+    //set hasGameEnded to true
+    await tttInstance.setGameEnded({
+      from : accounts[0],
+      gas : 5000000
+    });
     //call clearGameBoard
     await tttInstance.clearGameBoard({
       from : accounts[0], 
