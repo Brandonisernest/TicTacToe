@@ -1,7 +1,6 @@
 pragma solidity 0.8.10;
 
 
-
 contract TicTacToe {
 
     //enum and structs
@@ -44,6 +43,8 @@ contract TicTacToe {
     possibleChoices constant defaultChoice = possibleChoices.X;
     //Gameboard represented by mapping
     mapping(cellChoices => possibleChoices) public gameBoard;
+    //array used to reset gameBoard
+    cellChoices[] public gameBoardArray;
 
 
     constructor() payable {
@@ -81,6 +82,8 @@ contract TicTacToe {
         "That space is already taken");
         
         gameBoard[currentCellChoice] = _choice;
+        //add selected cell to array (to be used to reset later)
+        gameBoardArray.push(currentcellChoice;
     }
 
     //helper function
@@ -130,15 +133,59 @@ contract TicTacToe {
 
     }
 
-    //concats numbers to strings (shall I make this "cellNumber" eventually?)..keep sep for now
-    // function append(string memory a, string memory b) internal pure returns (string memory) {
-    //     return string(abi.encodePacked(a, b));
-    // }
+    function gameOver() public {
+        //emit event that says game over!
 
-    // //given row number outputs to _cellNumber
-    // function cellNumber(string memory _rowNum, string memory _colNum) public view returns(string memory) {
-    //     return append(_rowNum, _colNum); 
-    // }
+        //reset gameBoard
+
+
+        //send funds to winning team
+    }
+
+    function winCondition() public {
+        
+        possibleChoices choiceX = possibleChoices.X;
+        possibleChoices choiceY = possibleChoices.Y;
+
+        if(
+            //row win
+            (gameBoard[cellChoices.One_One] == choiceX && gameBoard[cellChoices.Two_One] == choiceX && gameBoard[cellChoices.Three_One] == choiceX) || 
+            (gameBoard[cellChoices.One_Two] == choiceX && gameBoard[cellChoices.Two_Two] == choiceX && gameBoard[cellChoices.Three_Two] == choiceX) ||
+            (gameBoard[cellChoices.One_Three] == choiceX && gameBoard[cellChoices.Two_Three] == choiceX && gameBoard[cellChoices.Three_Three] == choiceX) ||
+            //col win
+            (gameBoard[cellChoices.One_One] == choiceX && gameBoard[cellChoices.One_Two] == choiceX && gameBoard[cellChoices.One_Three] == choiceX) ||
+            (gameBoard[cellChoices.Two_One] == choiceX && gameBoard[cellChoices.Two_Two] == choiceX && gameBoard[cellChoices.Two_Three] == choiceX) ||
+            (gameBoard[cellChoices.Three_One] == choiceX && gameBoard[cellChoices.Three_Two] == choiceX && gameBoard[cellChoices.Three_Three] == choiceX) ||
+            //diag win
+            (gameBoard[cellChoices.One_One] == choiceX && gameBoard[cellChoices.Two_Two] == choiceX && gameBoard[cellChoices.Three_Three] == choiceX) ||
+            (gameBoard[cellChoices.Three_One] == choiceX && gameBoard[cellChoices.Two_Two] == choiceX && gameBoard[cellChoices.One_Three] == choiceX) 
+        ){
+            //do something
+        }
+        else if (
+            //row win
+            (gameBoard[cellChoices.One_One] == choiceY && gameBoard[cellChoices.Two_One] == choiceY && gameBoard[cellChoices.Three_One] == choiceY) || 
+            (gameBoard[cellChoices.One_Two] == choiceY && gameBoard[cellChoices.Two_Two] == choiceY && gameBoard[cellChoices.Three_Two] == choiceY) ||
+            (gameBoard[cellChoices.One_Three] == choiceY && gameBoard[cellChoices.Two_Three] == choiceY && gameBoard[cellChoices.Three_Three] == choiceY) ||
+            //col win
+            (gameBoard[cellChoices.One_One] == choiceY && gameBoard[cellChoices.One_Two] == choiceY && gameBoard[cellChoices.One_Three] == choiceY) ||
+            (gameBoard[cellChoices.Two_One] == choiceY && gameBoard[cellChoices.Two_Two] == choiceY && gameBoard[cellChoices.Two_Three] == choiceY) ||
+            (gameBoard[cellChoices.Three_One] == choiceY && gameBoard[cellChoices.Three_Two] == choiceY && gameBoard[cellChoices.Three_Three] == choiceY) ||
+            //diag win
+            (gameBoard[cellChoices.One_One] == choiceY && gameBoard[cellChoices.Two_Two] == choiceY && gameBoard[cellChoices.Three_Three] == choiceY) ||
+            (gameBoard[cellChoices.Three_One] == choiceY && gameBoard[cellChoices.Two_Two] == choiceY && gameBoard[cellChoices.One_Three] == choiceY) 
+        )
+        {
+            //do something else
+        }
+
+    }
+
+    function clearGameBoard() public {
+        for (uint i = 0; i < gameBoardArray.length; i++){
+            gameBoard[gameBoardArray[i]] = possibleChoices.placeholder;
+        }
+    }
     
 }
 
