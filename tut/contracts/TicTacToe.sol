@@ -1,6 +1,7 @@
 pragma solidity 0.8.10;
 
 
+
 contract TicTacToe {
 
     //enum and structs
@@ -83,7 +84,7 @@ contract TicTacToe {
         
         gameBoard[currentCellChoice] = _choice;
         //add selected cell to array (to be used to reset later)
-        gameBoardArray.push(currentcellChoice;
+        gameBoardArray.push(currentCellChoice);
     }
 
     //helper function
