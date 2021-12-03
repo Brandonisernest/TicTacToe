@@ -1,7 +1,6 @@
 pragma solidity 0.8.10;
 
 
-
 contract TicTacToe {
 
     //enum and structs
@@ -67,6 +66,7 @@ contract TicTacToe {
     //events (put in separate contract?)
     event cellClickedEvent(possibleChoices _choice, uint rowVal, uint colVal);
     event gameOverEvent(string);
+    event winningTeamEvent(possibleChoices);
     
     //declare this prior to constructor since I will use in constructor
     function enterPlayerHandler() public {
@@ -127,7 +127,7 @@ contract TicTacToe {
         require(playerBoolMapping[msg.sender] == true, "You aren't eligible to play. Enter contract first!");
         require(_choice == possibleChoices.X || _choice == possibleChoices.Y,"Choose only between X and Y");
         //require that only teamX can go when it is X's turn and vice versa for Y
-        require(teamMapping[msg.sender] == _choice, "You can't do that");
+        require(teamMapping[msg.sender] == _choice, "You can only choose your team's choices");
         require(teamMapping[msg.sender] == currentChoice, "Not your team's turn");
         //set spot on the grid to target
         cellChoices currentCellChoice;
@@ -138,6 +138,7 @@ contract TicTacToe {
         "That space is already taken");
         
         gameBoard[currentCellChoice] = _choice;
+
         //add selected cell to array (to be used to reset later)
         gameBoardArray.push(currentCellChoice);
         
@@ -241,6 +242,8 @@ contract TicTacToe {
             //do something
             hasGameEnded = true;
             winner = choiceX;
+            emit winningTeamEvent(winner);
+            gameOver();
         }
         else if (
             //row win
@@ -259,9 +262,10 @@ contract TicTacToe {
             //do something else
             hasGameEnded = true;
             winner = choiceY;
+            emit winningTeamEvent(winner);
+            gameOver();
         }
-
-        gameOver();
+        
 
     }
 
