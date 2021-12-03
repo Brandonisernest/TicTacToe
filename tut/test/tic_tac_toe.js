@@ -25,23 +25,28 @@ contract("TicTacToe", function (accounts) {
   // Test cell clicking ("X")
   it("Should result in cell equalling X", async() => {
     //function param (character, row_num, col_num)
-    const cellVal = await TicTacToe.clickCell("X",1,3);
-    return assert.equal(cellVal, ("X", 1, 3));
+    let rowVal = 1;
+    let colVal = 3;
+    const cellVal = await TicTacToe.clickCell("X", rowVal, colVal);
+    const gameBoardVal = await TicTacToe.checkGameBoard(rowVal, colVal);
+    return assert.equal(gameBoardVal, "X");
   });
 
-  // Test cell clicking("Y")
-  it("Should result in cell equalling Y", async() => {
-    //function param (character, row_num, col_num)
-    const cellVal = await TicTacToe.clickCell("Y", 3, 1);
-    return assert.equal(cellVal, ("Y", 3, 1));
+  // // Test cell clicking("Y")
+  // it("Should result in cell equalling Y", async() => {
+  //   //function param (character, row_num, col_num)
+  //   const cellVal = await TicTacToe.clickCell("Y", 3, 1);
+  //   return assert.equal(cellVal, ("Y", 3, 1));
 
-  });
+  // });
 
-  // Test win condition
-  it("Should return win", async () => {
-    await TicTacToe.winCondition();
-    return assert.isTrue(true);
-  });
+  // // Test the location of the cell
+
+  // // Test win condition
+  // it("Should return win", async () => {
+  //   await TicTacToe.winCondition();
+  //   return assert.isTrue(true);
+  // });
 
   
 });
