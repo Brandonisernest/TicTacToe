@@ -1,6 +1,22 @@
-<div class="game">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe dAPP</title>
+    <!-- This is the web3 cdn (latest version of web3) -->
+    <script src = "https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+
     <h1>Tic-Tac-Toe</h1>
     <header id="heading"></header>
+    <section id ="mm-section">
+      <div id = "mm-detected"></div>
+      <button id = "mm-connect-btn" >Connect to MetaMask</button>  
+      <div id = "mm-current-account"></div>
+  </section>
+    
     <div class="grid">
       <div class="cell" id = "1-1"></div>
       <div class="cell" id = "2-1"></div>
@@ -19,3 +35,4 @@
   <div id="popup"></div>
   <script src="app.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
+  </html>
