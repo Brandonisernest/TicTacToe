@@ -31,15 +31,51 @@ contract("TicTacToe", function (accounts) {
     return assert.isTrue(true);
   });
 
+  //test entering proper team
+
+  it("should add new player to correct team", async () => {
+
+    const teamName = await tttInstance.getTeam(accounts[1], {
+      from : accounts[1],
+      gas : 5000000
+    });
+
+    return assert.equal(teamName, 2);
+
+  });
+
+  it("should add ANOTHER new player to correct team", async () => {
+    //enter another address (accounts[2])
+    await tttInstance.enterContract({
+      from: accounts[2],
+      value: web3.utils.toWei("1", "Wei"),
+      gas: 5000000,
+    });
+
+
+    const teamName = await tttInstance.getTeam(accounts[2], {
+      from : accounts[2],
+      gas : 5000000
+    });
+
+    return assert.equal(teamName, 1);
+
+  });
+
+
+  //
+
   // Test cell clicking ("X")
   it("Should result in cell equalling X", async () => {
     let rowVal = 1;
     let colVal = 3;
     let choiceVal = 1;
 
+
+
     //function param (character, row_num, col_num)
     await tttInstance.clickCell(choiceVal, rowVal, colVal, {
-      from: accounts[1],
+      from: accounts[2],
       gas: 5000000,
     });
 
