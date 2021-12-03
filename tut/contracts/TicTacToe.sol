@@ -6,7 +6,9 @@ contract TicTacToe {
 
     //enum and structs
     //X = 0, Y = 1
-    enum possibleChoices {X, Y}
+    //the values that get returned are 0 and 1 (don't get confused)
+    //placeholder == 0. Pushing X to equal 1 and Y to equal 2 to prevent errors
+    enum possibleChoices {placeholder,X, Y}
     //game grid (X,Y) coord
     /*
     One_One == 0,
@@ -69,7 +71,7 @@ contract TicTacToe {
     function clickCell(possibleChoices _choice, uint _rowNum, uint _colNum) public {
         //require player to be in contract first
         require(playerBoolMapping[msg.sender] == true, "You aren't eligible to play. Enter contract first!");
-
+        require(_choice == possibleChoices.X || _choice == possibleChoices.Y,"Choose only between X and Y");
         //set spot on the grid to target
         cellChoices currentCellChoice;
         currentCellChoice = cellHandler(_rowNum, _colNum);
@@ -116,6 +118,16 @@ contract TicTacToe {
         }
     
         return currentCellChoice;
+    }
+
+    /// @notice check the value of a given cell in the gameboard
+    function checkGameBoard(uint _rowNum, uint _colNum) public view returns (possibleChoices) {
+        
+        cellChoices currentCellChoice;
+        currentCellChoice = cellHandler(_rowNum, _colNum);
+
+        return gameBoard[currentCellChoice];
+
     }
 
     //concats numbers to strings (shall I make this "cellNumber" eventually?)..keep sep for now
