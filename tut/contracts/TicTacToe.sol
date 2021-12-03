@@ -60,40 +60,49 @@ contract TicTacToe {
     event cellClickedEvent(possibleChoices _choice, uint rowVal, uint colVal);
     event gameOverEvent(string);
     
-
-    constructor() payable {
-        require(msg.value >= 1 wei, "You need to PAY some WEI to PLAY!");
-        //set deployer as gameMaser
-        gameMaster = msg.sender;
-        //set hasGameEnded
-        hasGameEnded = false;
-        //start game with X (defaultChoice)
-        currentChoice = defaultChoice;
-
-    }
-
-    //functions
-
-    function enterContract() public payable {
-        require(msg.value >= 1 wei, "You need to PAY some WEI to PLAY!");
+    //declare this prior to constructor since I will use in constructor
+    function enterPlayerHandler() public {
         //player has entered
         playerBoolMapping[msg.sender] = true;
         //player owns no funds. Their fee is locked up in contract
         playerFundMapping[msg.sender] = 0;
         //player's record is set to zero
         playerRecordMapping[msg.sender] = 0;
-
         //Get placed into team X or team Y
-        if(teamPlacementCounter % 2 == 0){
-            teamMapping[msg.sender] == possibleChoices.X;
+        if(teamPlacementCounter % 2 != 0){
+            teamMapping[msg.sender] = currentChoice;
+            //set currentChoice to Y
+            currentChoice = possibleChoices.Y;
         }
         else {
-            teamMapping[msg.sender] == possibleChoices.Y;
+            teamMapping[msg.sender] = currentChoice;
+            //set currentChoice to X
+            currentChoice = possibleChoices.X;
         }
-
         //increment teamPlacementCounter
         teamPlacementCounter++;
+    }
 
+
+    constructor() payable {
+        require(msg.value >= 1 wei, "You need to PAY some WEI to PLAY!");
+        require(playerBoolMapping[msg.sender] == false, "You are already in the game");
+        //set deployer as gameMaser
+        gameMaster = msg.sender;
+        //set hasGameEnded
+        hasGameEnded = false;
+        //start game with X (defaultChoice)
+        currentChoice = defaultChoice;
+        //assign deployer
+        enterPlayerHandler();   
+    }
+
+    //functions
+
+    function enterContract() public payable {
+        require(msg.value >= 1 wei, "You need to PAY some WEI to PLAY!");
+        require(playerBoolMapping[msg.sender] == false, "You are already in the game");
+        enterPlayerHandler();
     }
 
 
@@ -126,6 +135,7 @@ contract TicTacToe {
 
     //helper function
 
+    
     function cellHandler(uint _rowNum, uint _colNum) public pure returns(cellChoices) {
         require(_rowNum > 0 && _rowNum <= 3 && _colNum > 0 &&_colNum <= 3, "keep row and col 3x3");
         cellChoices currentCellChoice;
@@ -244,6 +254,11 @@ contract TicTacToe {
         else if(currentChoice == possibleChoices.Y){
             currentChoice = possibleChoices.X;
             }
+    }
+
+    //for unit testing purposes
+    function getTeam(address _addr) public view returns(possibleChoices){
+        return teamMapping[_addr];
     }
     
 }
