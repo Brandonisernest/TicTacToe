@@ -36,6 +36,8 @@ contract TicTacToe {
     mapping(address => bool) public playerBoolMapping;
     //Amount owned by player
     mapping(address => uint) public playerFundMapping;
+    //What team does this player belong to?
+    mapping(address => possibleChoices) public teamMapping;
     // Win/Loss mapping by player
     mapping(address => uint) public playerRecordMapping;
     //numerical representation of X,Y
@@ -50,6 +52,8 @@ contract TicTacToe {
     bool public hasGameEnded;
     //winner
     possibleChoices public winner;  
+    //team placement counter
+    uint public teamPlacementCounter = 1;
 
 
     //events (put in separate contract?)
@@ -78,6 +82,18 @@ contract TicTacToe {
         playerFundMapping[msg.sender] = 0;
         //player's record is set to zero
         playerRecordMapping[msg.sender] = 0;
+
+        //Get placed into team X or team Y
+        if(teamPlacementCounter % 2 == 0){
+            teamMapping[msg.sender] == possibleChoices.X;
+        }
+        else {
+            teamMapping[msg.sender] == possibleChoices.Y;
+        }
+
+        //increment teamPlacementCounter
+        teamPlacementCounter++;
+
     }
 
 
@@ -86,6 +102,8 @@ contract TicTacToe {
         //require player to be in contract first
         require(playerBoolMapping[msg.sender] == true, "You aren't eligible to play. Enter contract first!");
         require(_choice == possibleChoices.X || _choice == possibleChoices.Y,"Choose only between X and Y");
+        //require that only teamX can go when it is X's turn and vice versa for Y
+        require(_choice == currentChoice, "Not your team's turn");
         //set spot on the grid to target
         cellChoices currentCellChoice;
         currentCellChoice = cellHandler(_rowNum, _colNum);
@@ -97,6 +115,9 @@ contract TicTacToe {
         gameBoard[currentCellChoice] = _choice;
         //add selected cell to array (to be used to reset later)
         gameBoardArray.push(currentCellChoice);
+        
+        //switch current choice
+        gameOrder();
 
         //emit event
         emit cellClickedEvent(_choice, _rowNum, _colNum);
@@ -212,6 +233,16 @@ contract TicTacToe {
     function setGameEnded() public {
         require(msg.sender == gameMaster, "Only game master can call this.");
         hasGameEnded = true;
+    }
+
+    //how to ensure that nobody can call this fucntion? internal?
+    function gameOrder() internal {
+        if(currentChoice == possibleChoices.X){
+            currentChoice = possibleChoices.Y;
+        }
+        else if(currentChoice == possibleChoices.Y){
+            currentChoice = possibleChoices.X;
+            }
     }
     
 }
