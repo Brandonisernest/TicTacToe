@@ -69,28 +69,38 @@ contract("TicTacToe", function (accounts) {
 
   // Test cannot select cell if cell is already taken up
 
-  it("Should not let you selected cell that is already taken up", async() => {
-
+  it("Should not let you selected cell that is already taken up", async () => {
     //these should be already taken in the "it" statement above
     let rowVal = 2;
     let colVal = 3;
     let choiceVal = 1;
 
-
-    try{
+    try {
       //this should fail
       await tttInstance.clickCell(choiceVal, rowVal, colVal, {
         from: accounts[1],
         gas: 5000000,
       });
-    }
-    catch(err) {
+    } catch (err) {
       console.log(`${rowVal} and ${colVal} is already taken...`);
       return assert.isTrue(true);
     }
-    
+  });
 
+  //test gameBoardclearing
+  it("should clear the entireboard", async() => {
+    let rowVal = 2;
+    let colVal = 3;
+    let choiceVal = 1;
 
+    //call clearGameBoard
+    await tttInstance.clearGameBoard({
+      from : accounts[0], 
+      gas: 5000000});
+
+    const cellVal = await tttInstance.checkGameBoard(rowVal, colVal); 
+    //cellVal should be placeholder value (0) now.
+    return assert.equal(cellVal, 0);
   })
 
   // // Test the location of the cell
