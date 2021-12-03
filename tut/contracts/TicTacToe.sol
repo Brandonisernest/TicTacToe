@@ -299,20 +299,19 @@ contract TicTacToe {
     }
 
     //code out the transfer later....work on having a workable game first
-    function fundsHandler() public {
-        uint teamCount;
+    // function fundsHandler() public {
+    //     uint teamCount;
 
-        if(winner == possibleChoices.Y){
-            teamCount = teamYArray.length;
-        }
-        else if(winner == possibleChoices.X){
-            teamCount = teamXArray.length;
-        }
-    }
+    //     if(winner == possibleChoices.Y){
+    //         teamCount = teamYArray.length;
+    //     }
+    //     else if(winner == possibleChoices.X){
+    //         teamCount = teamXArray.length;
+    //     }
+    // }
     
 }
 
-//Right now I am basing this on strings for easier readibility
 /*
 
 Read up on this (pure vs view)
