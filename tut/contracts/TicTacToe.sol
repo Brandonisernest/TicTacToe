@@ -46,14 +46,26 @@ contract TicTacToe {
     mapping(cellChoices => possibleChoices) public gameBoard;
     //array used to reset gameBoard
     cellChoices[] public gameBoardArray;
+    //game status
+    bool public hasGameEnded;
+    //winner
+    possibleChoices public winner;  
 
+
+    //events (put in separate contract?)
+    event cellClickedEvent(possibleChoices _choice, uint rowVal, uint colVal);
+    event gameOverEvent(string);
+    
 
     constructor() payable {
         require(msg.value >= 1 wei, "You need to PAY some WEI to PLAY!");
         //set deployer as gameMaser
         gameMaster = msg.sender;
+        //set hasGameEnded
+        hasGameEnded = false;
         //start game with X (defaultChoice)
         currentChoice = defaultChoice;
+
     }
 
     //functions
@@ -85,6 +97,9 @@ contract TicTacToe {
         gameBoard[currentCellChoice] = _choice;
         //add selected cell to array (to be used to reset later)
         gameBoardArray.push(currentCellChoice);
+
+        //emit event
+        emit cellClickedEvent(_choice, _rowNum, _colNum);
     }
 
     //helper function
@@ -136,10 +151,9 @@ contract TicTacToe {
 
     function gameOver() public {
         //emit event that says game over!
-
+        emit gameOverEvent("The game is over!");
         //reset gameBoard
-
-
+        clearGameBoard();
         //send funds to winning team
     }
 
@@ -162,6 +176,8 @@ contract TicTacToe {
             (gameBoard[cellChoices.Three_One] == choiceX && gameBoard[cellChoices.Two_Two] == choiceX && gameBoard[cellChoices.One_Three] == choiceX) 
         ){
             //do something
+            hasGameEnded = true;
+            winner = choiceX;
         }
         else if (
             //row win
@@ -178,14 +194,24 @@ contract TicTacToe {
         )
         {
             //do something else
+            hasGameEnded = true;
+            winner = choiceY;
         }
 
     }
 
+
     function clearGameBoard() public {
+        require(hasGameEnded == true, "Can't reset game board until game is finished");
         for (uint i = 0; i < gameBoardArray.length; i++){
             gameBoard[gameBoardArray[i]] = possibleChoices.placeholder;
         }
+    }
+
+    //for unit testing purposes
+    function setGameEnded() public {
+        require(msg.sender == gameMaster, "Only game master can call this.");
+        hasGameEnded = true;
     }
     
 }
