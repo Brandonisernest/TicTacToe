@@ -40,7 +40,9 @@ contract TicTacToe {
     mapping(address => possibleChoices) public teamMapping;
     // Win/Loss mapping by player
     mapping(address => uint) public playerRecordMapping;
-    //numerical representation of X,Y
+    //instnatiate possibleChoices enum for team assignment
+    possibleChoices public teamAssignment;
+    //instantiate possibleChoices enum for gameOrder
     possibleChoices public currentChoice; 
     // necessary?
     possibleChoices constant defaultChoice = possibleChoices.X;
@@ -70,14 +72,14 @@ contract TicTacToe {
         playerRecordMapping[msg.sender] = 0;
         //Get placed into team X or team Y
         if(teamPlacementCounter % 2 != 0){
-            teamMapping[msg.sender] = currentChoice;
-            //set currentChoice to Y
-            currentChoice = possibleChoices.Y;
+            teamMapping[msg.sender] = teamAssignment;
+            //set teamAssignment to Y
+            teamAssignment = possibleChoices.Y;
         }
         else {
-            teamMapping[msg.sender] = currentChoice;
-            //set currentChoice to X
-            currentChoice = possibleChoices.X;
+            teamMapping[msg.sender] = teamAssignment;
+            //set teamAssignment to X
+            teamAssignment = possibleChoices.X;
         }
         //increment teamPlacementCounter
         teamPlacementCounter++;
