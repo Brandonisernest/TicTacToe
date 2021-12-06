@@ -27,7 +27,7 @@ mmEnable.onclick = async () => {
 };
 
 //remix contract address deployed on rinkeby
-const ssAddress = "0x275a15765D9aFBeCBeDF03e744188D46fE832809";
+const ssAddress = "0xa9ce6771eBe2dd331A81bd0efD72deC861369194";
 
 //get the ABI from remix
 const ssABI = [
@@ -259,13 +259,19 @@ const ssABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getCellChoices",
+		"inputs": [
+			{
+				"internalType": "enum TicTacToe.cellChoices",
+				"name": "_choice",
+				"type": "uint8"
+			}
+		],
+		"name": "getCellChoice",
 		"outputs": [
 			{
-				"internalType": "enum TicTacToe.cellChoices[]",
+				"internalType": "enum TicTacToe.possibleChoices",
 				"name": "",
-				"type": "uint8[]"
+				"type": "uint8"
 			}
 		],
 		"stateMutability": "view",
@@ -279,6 +285,19 @@ const ssABI = [
 				"internalType": "enum TicTacToe.possibleChoices",
 				"name": "",
 				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTakenCell",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.cellChoices[]",
+				"name": "",
+				"type": "uint8[]"
 			}
 		],
 		"stateMutability": "view",
@@ -538,7 +557,6 @@ const teamBtn = document.getElementById("team-btn");
 const teamTurn = document.getElementById("team-turn");
 const teamTurnBtn = document.getElementById("team-turn-btn");
 
-
 //////////Instantiate web 3
 //instantiate web3 (avoid doing so globally)
 const web3 = new Web3(window.ethereum);
@@ -646,45 +664,40 @@ const teamTurnHandler = async () => {
 
 // displaying the game board
 
-const displayGameBoard = async() => {
-
+const displayGameBoard = async () => {
   let gameBoardArray;
 
   const gameBoardObj = {
-    0:(1,1),
-    1:(2,1),
-    2:(3,1),
-    3:(1,2),
-    4:(2,2),
-    5:(3,2),
-    6:(1,3),
-    7:(2,3),
-    8:(3,3)
-  }
+    0: (1, 1),
+    1: (2, 1),
+    2: (3, 1),
+    3: (1, 2),
+    4: (2, 2),
+    5: (3, 2),
+    6: (1, 3),
+    7: (2, 3),
+    8: (3, 3),
+  };
 
-  gameBoardArray = await tttGame.methods.getTakenCell()
-  .call({ from: ethereum.selectedAddress, gas: 5000000 });
+  gameBoardArray = await tttGame.methods
+    .getTakenCell()
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
 
   console.log(gameBoardArray);
 
-  gameCells.forEach(async(cell) => {
-
-    for (i of gameBoardArray){
-
+  gameCells.forEach(async (cell) => {
+    for (i of gameBoardArray) {
       let rowNum = gameBoardObj[i][0];
       let colNum = gameBoardObj[i][1];
 
-      if(cell.data.x == rowNum && cell.data.y == colNum){
-        cell.innerHTML = await tttGame.methods.getCellChoice(i)
-        .call({ from: ethereum.selectedAddress, gas: 5000000 });
+      if (cell.data.x == rowNum && cell.data.y == colNum) {
+        cell.innerHTML = await tttGame.methods
+          .getCellChoice(i)
+          .call({ from: ethereum.selectedAddress, gas: 5000000 });
       }
     }
-    
   });
-
-  
-}
-
+};
 
 //execute functions
 
@@ -694,7 +707,6 @@ teamTurnBtn.addEventListener("click", teamTurnHandler);
 teamTurnHandler();
 clickCell();
 displayGameBoard();
-
 
 /*
 to dos:
