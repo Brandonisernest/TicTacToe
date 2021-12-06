@@ -69,12 +69,12 @@ contract("TicTacToe", function (accounts) {
   it("Should result in cell equalling X", async () => {
     let rowVal = 1;
     let colVal = 3;
-    let choiceVal = 1;
+    // let choiceVal = 1;
 
 
 
     //function param (character, row_num, col_num)
-    await tttInstance.clickCell(choiceVal, rowVal, colVal, {
+    await tttInstance.clickCell(rowVal, colVal, {
       from: accounts[2],
       gas: 5000000,
     });
@@ -91,10 +91,10 @@ contract("TicTacToe", function (accounts) {
   it("Should result in cell equalling Y", async () => {
     let rowVal = 2;
     let colVal = 3;
-    let choiceVal = 2;
+    // let choiceVal = 2;
 
     //function param (character, row_num, col_num)
-    await tttInstance.clickCell(choiceVal, rowVal, colVal, {
+    await tttInstance.clickCell(rowVal, colVal, {
       from: accounts[1],
       gas: 5000000,
     });
