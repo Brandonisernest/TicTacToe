@@ -27,490 +27,502 @@ mmEnable.onclick = async () => {
 };
 
 //remix contract address deployed on rinkeby
-const ssAddress = "0xf17276E87177Ada270aAeC0ec8827e15971af875";
+const ssAddress = "0x275a15765D9aFBeCBeDF03e744188D46fE832809";
 
 //get the ABI from remix
 const ssABI = [
-  {
-    inputs: [],
-    stateMutability: "payable",
-    type: "constructor",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "_choice",
-        type: "uint8",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "rowVal",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "colVal",
-        type: "uint256",
-      },
-    ],
-    name: "cellClickedEvent",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    name: "gameOverEvent",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    name: "winningTeamEvent",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_rowNum",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_colNum",
-        type: "uint256",
-      },
-    ],
-    name: "cellHandler",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.cellChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_rowNum",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_colNum",
-        type: "uint256",
-      },
-    ],
-    name: "checkGameBoard",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "clearGameBoard",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_rowNum",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_colNum",
-        type: "uint256",
-      },
-    ],
-    name: "clickCell",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currentChoice",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currentPlayer",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "enterContract",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "enterPlayerHandler",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "enum TicTacToe.cellChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    name: "gameBoard",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "gameBoardArray",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.cellChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "gameMaster",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "gameOver",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getCurrentTurn",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_addr",
-        type: "address",
-      },
-    ],
-    name: "getTeam",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getWinner",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "hasGameEnded",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "playerBoolMapping",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "playerFundMapping",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "playerRecordMapping",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "resetGame",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "setGameEnded",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "teamAssignment",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "teamMapping",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "teamPlacementCounter",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "teamXArray",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "teamYArray",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "totalPlayersArray",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "winCondition",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "winner",
-    outputs: [
-      {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
-
+	{
+		"inputs": [],
+		"stateMutability": "payable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "_choice",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "rowVal",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "colVal",
+				"type": "uint256"
+			}
+		],
+		"name": "cellClickedEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "gameOverEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"name": "winningTeamEvent",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_rowNum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_colNum",
+				"type": "uint256"
+			}
+		],
+		"name": "cellHandler",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.cellChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_rowNum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_colNum",
+				"type": "uint256"
+			}
+		],
+		"name": "checkGameBoard",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "clearGameBoard",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_rowNum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_colNum",
+				"type": "uint256"
+			}
+		],
+		"name": "clickCell",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "currentChoice",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "currentPlayer",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "enterContract",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "enterPlayerHandler",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "enum TicTacToe.cellChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"name": "gameBoard",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "gameBoardArray",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.cellChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "gameMaster",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "gameOver",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCellChoices",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.cellChoices[]",
+				"name": "",
+				"type": "uint8[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentTurn",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_addr",
+				"type": "address"
+			}
+		],
+		"name": "getTeam",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getWinner",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "hasGameEnded",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerBoolMapping",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerFundMapping",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerRecordMapping",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "resetGame",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setGameEnded",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "teamAssignment",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "teamMapping",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "teamPlacementCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "teamXArray",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "teamYArray",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "totalPlayersArray",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "winCondition",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "winner",
+		"outputs": [
+			{
+				"internalType": "enum TicTacToe.possibleChoices",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 /*
 1. Click btn to enter game
 2. Give a message to let new player know what team they are on
@@ -632,9 +644,44 @@ const teamTurnHandler = async () => {
   teamTurn.innerHTML = frontEndTurnText;
 };
 
-//displaying the game board
+// displaying the game board
 
 const displayGameBoard = async() => {
+
+  let gameBoardArray;
+
+  const gameBoardObj = {
+    0:(1,1),
+    1:(2,1),
+    2:(3,1),
+    3:(1,2),
+    4:(2,2),
+    5:(3,2),
+    6:(1,3),
+    7:(2,3),
+    8:(3,3)
+  }
+
+  gameBoardArray = await tttGame.methods.getTakenCell()
+  .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  console.log(gameBoardArray);
+
+  gameCells.forEach(async(cell) => {
+
+    for (i of gameBoardArray){
+
+      let rowNum = gameBoardObj[i][0];
+      let colNum = gameBoardObj[i][1];
+
+      if(cell.data.x == rowNum && cell.data.y == colNum){
+        cell.innerHTML = await tttGame.methods.getCellChoice(i)
+        .call({ from: ethereum.selectedAddress, gas: 5000000 });
+      }
+    }
+    
+  });
+
   
 }
 
@@ -644,7 +691,9 @@ const displayGameBoard = async() => {
 gameBtn.addEventListener("click", enterGame);
 teamBtn.addEventListener("click", getTeam);
 teamTurnBtn.addEventListener("click", teamTurnHandler);
+teamTurnHandler();
 clickCell();
+displayGameBoard();
 
 
 /*
