@@ -121,13 +121,13 @@ contract TicTacToe {
     }
 
 
-    /// @param _choice is X or Y
-    function clickCell(possibleChoices _choice, uint _rowNum, uint _colNum) public {
+
+    function clickCell(uint _rowNum, uint _colNum) public {
         //require player to be in contract first
         require(playerBoolMapping[msg.sender] == true, "You aren't eligible to play. Enter contract first!");
-        require(_choice == possibleChoices.X || _choice == possibleChoices.Y,"Choose only between X and Y");
+        // require(_choice == possibleChoices.X || _choice == possibleChoices.Y,"Choose only between X and Y");
         //require that only teamX can go when it is X's turn and vice versa for Y
-        require(teamMapping[msg.sender] == _choice, "You can only choose your team's choices");
+        // require(teamMapping[msg.sender] == _choice, "You can only choose your team's choices");
         require(teamMapping[msg.sender] == currentChoice, "Not your team's turn");
         //set spot on the grid to target
         cellChoices currentCellChoice;
@@ -137,7 +137,7 @@ contract TicTacToe {
         require(gameBoard[currentCellChoice] != possibleChoices.X && gameBoard[currentCellChoice] != possibleChoices.Y, 
         "That space is already taken");
         
-        gameBoard[currentCellChoice] = _choice;
+        gameBoard[currentCellChoice] = teamMapping[msg.sender];
 
         //add selected cell to array (to be used to reset later)
         gameBoardArray.push(currentCellChoice);
@@ -146,7 +146,7 @@ contract TicTacToe {
         gameOrder();
 
         //emit event
-        emit cellClickedEvent(_choice, _rowNum, _colNum);
+        emit cellClickedEvent(teamMapping[msg.sender], _rowNum, _colNum);
 
         winCondition();
     }
