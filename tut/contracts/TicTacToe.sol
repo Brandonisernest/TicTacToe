@@ -219,6 +219,8 @@ contract TicTacToe {
 
         }
         
+        //reset game
+        resetGame();
     }
 
     function winCondition() public {
@@ -298,6 +300,13 @@ contract TicTacToe {
         return teamMapping[_addr];
     }
 
+    function resetGame() public {
+        require(hasGameEnded == true, "Can't reset game until game is finished");
+
+        hasGameEnded = false;
+        currentChoice = defaultChoice;
+    }
+
     //code out the transfer later....work on having a workable game first
     // function fundsHandler() public {
     //     uint teamCount;
@@ -317,5 +326,7 @@ contract TicTacToe {
 
 Read up on this (pure vs view)
 https://www.google.com/search?q=pure+vs+view+function+solidity&oq=pure+vs+view+function+solidity&aqs=chrome..69i57.4375j0j1&sourceid=chrome&ie=UTF-8
+
+//Use this project as opportunity to learn how to make upgradeable contracts
 
 */
