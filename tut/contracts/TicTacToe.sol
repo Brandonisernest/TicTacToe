@@ -311,13 +311,20 @@ contract TicTacToe {
         return currentChoice;
     }
 
+
     function getWinner() public view returns(possibleChoices){
-        if(hasGameEnded == false){
-            revert("The game has not ended");
-        } else {
+        if (hasGameEnded == true){
             return winner;
             }
     }
+
+    // function getWinner() public view returns(possibleChoices){
+    //     if(hasGameEnded == false){
+    //         revert("The game has not ended");
+    //     } else {
+    //         return winner;
+    //         }
+    // }
 
     //code out the transfer later....work on having a workable game first
     // function fundsHandler() public {
