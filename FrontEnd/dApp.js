@@ -526,19 +526,6 @@ const teamBtn = document.getElementById("team-btn");
 const teamTurn = document.getElementById("team-turn");
 const teamTurnBtn = document.getElementById("team-turn-btn");
 
-// // assign each front end cell with back end
-// const _11 = document.getElementById("1-1");
-// const _21 = document.getElementById("2-1");
-// const _31 = document.getElementById("3-1");
-// //row 2
-// const _12 = document.getElementById("1-2");
-// const _22 = document.getElementById("2-2");
-// const _32 = document.getElementById("3-2");
-// //row 3
-// const _13 = document.getElementById("1-3");
-// const _23 = document.getElementById("2-3");
-// const _33 = document.getElementById("3-3");
-// //
 
 //////////Instantiate web 3
 //instantiate web3 (avoid doing so globally)
@@ -600,20 +587,8 @@ const clickCell = () => {
 };
 //helper functions
 
+//back end stuff ONLY
 const clickCellHandler = async (cell) => {
-  //for front end
-  // let currentChoice;
-
-  // const turnText = await tttGame.methods
-  //   .getCurrentTurn()
-  //   .call({ from: ethereum.selectedAddress, gas: 5000000 });
-
-  // if (turnText == 1) {
-  //   currentChoice = "X";
-  // } else {
-  //   currentChoice = "Y";
-  // }
-
   //returns cell's x and y
   let rowNum = cell.target.dataset.x;
   let colNum = cell.target.dataset.y;
@@ -623,23 +598,24 @@ const clickCellHandler = async (cell) => {
     from: ethereum.selectedAddress,
     gas: 5000000,
   });
-  //front end
-  // cell.target.innerHTML = currentChoice;
+
   //update team turn
   await teamTurnHandler();
+
   //check win condition
   const winner = await tttGame.methods
     .getWinner()
     .call({ from: ethereum.selectedAddress, gas: 5000000 });
 
-  // //check if there is a winner
-  // if (winner) {
-  //   //let everybody know who the winner is
-  //   alert(winner);
-  //   //clear front end game board
-  // }
+  //check if there is a winner
+  if (winner != 0) {
+    //let everybody know who the winner is
+    alert(winner);
+    //clear front end game board
+  }
 };
 
+//displaying team turn
 const teamTurnHandler = async () => {
   let frontEndTurnText;
 
@@ -656,17 +632,20 @@ const teamTurnHandler = async () => {
   teamTurn.innerHTML = frontEndTurnText;
 };
 
+//displaying the game board
+
+const displayGameBoard = async() => {
+  
+}
+
+
 //execute functions
 
 gameBtn.addEventListener("click", enterGame);
 teamBtn.addEventListener("click", getTeam);
 teamTurnBtn.addEventListener("click", teamTurnHandler);
 clickCell();
-// console.log(gameCells);
 
-//  _21.addEventListener("click", (ev) => {
-//   console.log(ev.target.dataset.x);
-// });
 
 /*
 to dos:
