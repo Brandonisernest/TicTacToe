@@ -318,10 +318,13 @@ contract TicTacToe {
             }
     }
 
-    function getCellChoicea() public view returns (cellChoices[] memory) {
+    function getTakenCell() public view returns (cellChoices[] memory) {
         return gameBoardArray;
     }
 
+    function getCellChoice(cellChoices _choice) public view returns(possibleChoices) {
+        return gameBoard[_choice];
+    }
   
 
     //code out the transfer later....work on having a workable game first
