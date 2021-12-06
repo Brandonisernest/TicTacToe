@@ -27,7 +27,7 @@ mmEnable.onclick = async () => {
 };
 
 //remix contract address deployed on rinkeby
-const ssAddress = "0x31245d9434F5Ccc6830Ca07cF52e3dfbe9730341";
+const ssAddress = "0xf17276E87177Ada270aAeC0ec8827e15971af875";
 
 //get the ABI from remix
 const ssABI = [
@@ -145,11 +145,6 @@ const ssABI = [
   {
     inputs: [
       {
-        internalType: "enum TicTacToe.possibleChoices",
-        name: "_choice",
-        type: "uint8",
-      },
-      {
         internalType: "uint256",
         name: "_rowNum",
         type: "uint256",
@@ -264,6 +259,19 @@ const ssABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getCurrentTurn",
+    outputs: [
+      {
+        internalType: "enum TicTacToe.possibleChoices",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -272,6 +280,19 @@ const ssABI = [
       },
     ],
     name: "getTeam",
+    outputs: [
+      {
+        internalType: "enum TicTacToe.possibleChoices",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getWinner",
     outputs: [
       {
         internalType: "enum TicTacToe.possibleChoices",
@@ -350,6 +371,13 @@ const ssABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "resetGame",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -483,7 +511,6 @@ const ssABI = [
   },
 ];
 
-
 /*
 1. Click btn to enter game
 2. Give a message to let new player know what team they are on
@@ -492,141 +519,158 @@ const ssABI = [
 
 */
 
-
-
 //global variables
 const gameCells = document.querySelectorAll(".cell");
-const playerChoices = ["X", "Y"];
-let player;
 const gameBtn = document.getElementById("game-btn");
-//
+const teamBtn = document.getElementById("team-btn");
+const teamTurn = document.getElementById("team-turn");
+const teamTurnBtn = document.getElementById("team-turn-btn");
 
-function gameOver() {
-  //winning message!
-  alert(`Game Over: Player ${choice} wins!`);
-  //clear the board
-  gameCells.forEach((cell) => {
-    cell.innerHTML = "";
+// // assign each front end cell with back end
+// const _11 = document.getElementById("1-1");
+// const _21 = document.getElementById("2-1");
+// const _31 = document.getElementById("3-1");
+// //row 2
+// const _12 = document.getElementById("1-2");
+// const _22 = document.getElementById("2-2");
+// const _32 = document.getElementById("3-2");
+// //row 3
+// const _13 = document.getElementById("1-3");
+// const _23 = document.getElementById("2-3");
+// const _33 = document.getElementById("3-3");
+// //
+
+//////////Instantiate web 3
+//instantiate web3 (avoid doing so globally)
+const web3 = new Web3(window.ethereum);
+//instance of the secret santa (ssABI and ssAddress declared above)
+const tttGame = new web3.eth.Contract(ssABI, ssAddress);
+//remember that window.ethereum IS MetaMask
+tttGame.setProvider(window.ethereum);
+///////////
+
+const enterGame = async () => {
+  let team;
+
+  const valueInput = document.getElementById("value-input");
+  const weiAmt = valueInput.value;
+
+  await tttGame.methods.enterContract().send({
+    from: ethereum.selectedAddress,
+    value: web3.utils.toWei(weiAmt, "ether"),
+    gas: 5000000,
   });
-}
 
-//sets the cells
-function cellHandler(cell) {
-  if (cell.innerHTML != "X" && cell.innerHTML != "Y") {
-    cell.innerHTML = player;
-    //switch to other player
-    gameOrder();
-  } else if (cell.innerHTML == "X") {
-    //if value is in cell already...don't allow change
-    //keep going
-    console.log(
-      `That spot is taken, try again. Still Player ${player}'s turn'`
-    );
-  } else if (cell.innerHTML == "Y") {
-    //if value is in cell already don't allow change
-    //keep going
-    console.log(
-      `That spot is taken, try again. Still Player ${player}'s turn'`
-    );
+  const playerTeam = await tttGame.methods
+    .getTeam(ethereum.selectedAddress)
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  if (playerTeam == 1) {
+    team = "X";
+  } else if (playerTeam == 2) {
+    team = "Y";
   }
+  console.log(`${ethereum.selectedAddress}, you are on team ${team}`);
+};
 
-  winCondition();
-}
+const getTeam = async () => {
+  let team;
 
-function gameOrder() {
-  if (player == playerChoices[0]) {
-    player = playerChoices[1];
+  const playerTeam = await tttGame.methods
+    .getTeam(ethereum.selectedAddress)
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  if (playerTeam == 1) {
+    team = "X";
+  } else if (playerTeam == 2) {
+    team = "Y";
   } else {
-    player = playerChoices[0];
+    team = "You arent in the game.";
   }
-}
 
-function winCondition() {
-  //declare individual boxes
-  //row 1
-  const _11 = document.getElementById("1-1");
-  const _21 = document.getElementById("2-1");
-  const _31 = document.getElementById("3-1");
-  //row 2
-  const _12 = document.getElementById("1-2");
-  const _22 = document.getElementById("2-2");
-  const _32 = document.getElementById("3-2");
-  //row 3
-  const _13 = document.getElementById("1-3");
-  const _23 = document.getElementById("2-3");
-  const _33 = document.getElementById("3-3");
+  console.log(`${ethereum.selectedAddress}, you are on team: ${team}`);
+  return team;
+};
 
-  //if 3 rows, cols, diagonols happen. Win
-  for (choice of playerChoices) {
-    if (
-      //row win
-      (_11.innerHTML == choice &&
-        _21.innerHTML == choice &&
-        _31.innerHTML == choice) ||
-      (_12.innerHTML == choice &&
-        _22.innerHTML == choice &&
-        _32.innerHTML == choice) ||
-      (_13.innerHTML == choice &&
-        _23.innerHTML == choice &&
-        _33.innerHTML == choice) ||
-      //column win
-      (_11.innerHTML == choice &&
-        _12.innerHTML == choice &&
-        _13.innerHTML == choice) ||
-      (_21.innerHTML == choice &&
-        _22.innerHTML == choice &&
-        _23.innerHTML == choice) ||
-      (_31.innerHTML == choice &&
-        _32.innerHTML == choice &&
-        _33.innerHTML == choice) ||
-      //diag win
-      (_11.innerHTML == choice &&
-        _22.innerHTML == choice &&
-        _33.innerHTML == choice) ||
-      (_31.innerHTML == choice &&
-        _22.innerHTML == choice &&
-        _13.innerHTML == choice)
-    ) {
-      gameOver();
-    }
-  }
-}
-
-function gameHandler() {
+const clickCell = () => {
   gameCells.forEach((cell) => {
-    cell.addEventListener("click", cellHandler.bind(this, cell));
+    // cell.addEventListener("click", () => {console.log(rowNum)});
+    cell.addEventListener("click", clickCellHandler);
   });
-}
+};
+//helper functions
 
-function gameStart() {
-  //randomize starting player
-  if (getRandomInt(2) == 0) {
-    player = playerChoices[0];
+const clickCellHandler = async (cell) => {
+  //for front end
+  // let currentChoice;
+
+  // const turnText = await tttGame.methods
+  //   .getCurrentTurn()
+  //   .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  // if (turnText == 1) {
+  //   currentChoice = "X";
+  // } else {
+  //   currentChoice = "Y";
+  // }
+
+  //returns cell's x and y
+  let rowNum = cell.target.dataset.x;
+  let colNum = cell.target.dataset.y;
+
+  //back end
+  await tttGame.methods.clickCell(rowNum, colNum).send({
+    from: ethereum.selectedAddress,
+    gas: 5000000,
+  });
+  //front end
+  // cell.target.innerHTML = currentChoice;
+  //update team turn
+  await teamTurnHandler();
+  //check win condition
+  const winner = await tttGame.methods
+    .getWinner()
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  // //check if there is a winner
+  // if (winner) {
+  //   //let everybody know who the winner is
+  //   alert(winner);
+  //   //clear front end game board
+  // }
+};
+
+const teamTurnHandler = async () => {
+  let frontEndTurnText;
+
+  const turnText = await tttGame.methods
+    .getCurrentTurn()
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  if (turnText == 1) {
+    frontEndTurnText = "X";
   } else {
-    player = playerChoices[1];
+    frontEndTurnText = "Y";
   }
-  //clear the board
-  gameCells.forEach((cell) => {
-    cell.innerHTML = "";
-  });
 
-  //start game
-  gameHandler();
-}
-
-//helper function
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+  teamTurn.innerHTML = frontEndTurnText;
+};
 
 //execute functions
-gameBtn.addEventListener("click", gameStart);
 
-//appendix
-// gameCells.forEach((cell)=> {
-//     cell.addEventListener("click", () => {
-//         cell.innerHTML = "Hi";
-//     })
-// })
+gameBtn.addEventListener("click", enterGame);
+teamBtn.addEventListener("click", getTeam);
+teamTurnBtn.addEventListener("click", teamTurnHandler);
+clickCell();
+// console.log(gameCells);
 
-//Ask Henry: How to arrow functions work? why do they remove the need to "bind"?
+//  _21.addEventListener("click", (ev) => {
+//   console.log(ev.target.dataset.x);
+// });
+
+/*
+to dos:
+2. put web3 instantiation in handler function
+3. Make contract upgradeable
+
+*/
