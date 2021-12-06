@@ -307,6 +307,18 @@ contract TicTacToe {
         currentChoice = defaultChoice;
     }
 
+    function getCurrentTurn() public view returns(possibleChoices){
+        return currentChoice;
+    }
+
+    function getWinner() public view returns(possibleChoices){
+        if(hasGameEnded == false){
+            revert("The game has not ended");
+        } else {
+            return winner;
+            }
+    }
+
     //code out the transfer later....work on having a workable game first
     // function fundsHandler() public {
     //     uint teamCount;
