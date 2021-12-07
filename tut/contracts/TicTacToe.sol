@@ -203,12 +203,14 @@ contract TicTacToe {
         //emit event that says game over!
         emit gameOverEvent("The game is over!");
 
+        hasGameEnded = true;
         //send funds to winning team
 
         //reset gameBoard
         clearGameBoard();
 
         //reset mappings
+        //sets teamassingment to 0, need to set back to X when reseting game
         teamAssignment = possibleChoices.placeholder;
         for(uint i = 0; i < totalPlayersArray.length; i++){
 
@@ -248,7 +250,7 @@ contract TicTacToe {
             (gameBoard[cellChoices.Three_One] == choiceX && gameBoard[cellChoices.Two_Two] == choiceX && gameBoard[cellChoices.One_Three] == choiceX) 
         ){
             //do something
-            hasGameEnded = true;
+            
             winner = choiceX;
             emit winningTeamEvent(winner);
             gameOver();
@@ -268,7 +270,7 @@ contract TicTacToe {
         )
         {
             //do something else
-            hasGameEnded = true;
+            // hasGameEnded = true;
             winner = choiceY;
             emit winningTeamEvent(winner);
             gameOver();
@@ -311,18 +313,21 @@ contract TicTacToe {
 
         hasGameEnded = false;
         currentChoice = defaultChoice;
+        teamAssignment = possibleChoices.X;
+        //reset teamPlacementCounter;
+        teamPlacementCounter = 1;
     }
 
     function getCurrentTurn() public view returns(possibleChoices){
         return currentChoice;
     }
 
-
-    function getWinner() public view returns(possibleChoices){
-        if (hasGameEnded == true){
-            return winner;
-            }
-    }
+    //useless function
+    // function getWinner() public view returns(possibleChoices){
+    //     if (hasGameEnded == true){
+    //         return winner;
+    //         }
+    // }
 
 
     function getTakenCell() public view returns (cellChoices[] memory) {
