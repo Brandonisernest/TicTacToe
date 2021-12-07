@@ -722,7 +722,7 @@ const clickCellHandler = async (cell) => {
   //check if there is a winner
   if ((await winner) != 0) {
     //let everybody know who the winner is
-    alert(`The winner is: ${winnerText}!`);
+    teamTurn.innerHTML = `The winner is: ${winnerText}!`;
     //clear front end game board
     gameCells.forEach((cell) => {
       cell.innerHTML = "";
