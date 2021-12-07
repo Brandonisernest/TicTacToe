@@ -76,6 +76,11 @@ contract TicTacToe {
         playerFundMapping[msg.sender] = 0;
         //player's record is set to zero
         playerRecordMapping[msg.sender] = 0;
+
+        //set winner to 0
+        winner = possibleChoices.placeholder;
+
+
         //Get placed into team X or team Y
         if(teamPlacementCounter % 2 != 0){
             teamMapping[msg.sender] = teamAssignment;
