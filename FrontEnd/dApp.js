@@ -678,7 +678,7 @@ const getTeam = async () => {
     team = "You arent in the game.";
   }
 
-  console.log(`${ethereum.selectedAddress}, you are on team: ${team}`);
+  alert(`${ethereum.selectedAddress}, you are on team: ${team}`);
 
   //refresh gameboard visual
   displayGameBoard();
