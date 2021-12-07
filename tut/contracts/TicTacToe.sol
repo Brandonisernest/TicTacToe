@@ -219,6 +219,12 @@ contract TicTacToe {
 
         }
         
+        //reset arrays
+        delete gameBoardArray;
+        delete totalPlayersArray;
+        delete teamXArray;
+        delete teamYArray;
+
         //reset game
         resetGame();
     }
@@ -318,6 +324,7 @@ contract TicTacToe {
             }
     }
 
+
     function getTakenCell() public view returns (cellChoices[] memory) {
         return gameBoardArray;
     }
@@ -325,7 +332,7 @@ contract TicTacToe {
     function getCellChoice(cellChoices _choice) public view returns(possibleChoices) {
         return gameBoard[_choice];
     }
-  
+    
 
     //code out the transfer later....work on having a workable game first
     // function fundsHandler() public {
