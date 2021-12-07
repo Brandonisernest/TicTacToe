@@ -22,8 +22,11 @@ mmEnable.onclick = async () => {
   const mmCurrentAccount = document.getElementById("mm-current-account");
   console.log(mmCurrentAccount);
 
-  mmCurrentAccount.innerHTML =
-    "Here's your current account" + ethereum.selectedAddress;
+  // mmCurrentAccount.innerHTML =
+  //   "Here's your current account" + ethereum.selectedAddress;
+
+   
+  alert("Here's your current account" + ethereum.selectedAddress);
 };
 
 //remix contract address deployed on rinkeby
@@ -708,12 +711,18 @@ const clickCellHandler = async (cell) => {
   await teamTurnHandler();
 
   //check win condition
+  let winnerText;
   const winner = await tttGame.methods.winner.call().call();
 
+  if((await winner) == 1) {
+    winnerText = "X";
+  } else if((await winner) == 2) {
+    winnerText = "Y"
+  }
   //check if there is a winner
   if ((await winner) != 0) {
     //let everybody know who the winner is
-    alert(`The winner is: ${winner}!`);
+    alert(`The winner is: ${winnerText}!`);
     //clear front end game board
     gameCells.forEach((cell) => {
       cell.innerHTML = "";
