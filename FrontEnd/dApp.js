@@ -555,7 +555,7 @@ const gameCells = document.querySelectorAll(".cell");
 const gameBtn = document.getElementById("game-btn");
 const teamBtn = document.getElementById("team-btn");
 const teamTurn = document.getElementById("team-turn");
-const teamTurnBtn = document.getElementById("team-turn-btn");
+const waitingHeader = document.getElementById("waiting-header");
 
 //////////Instantiate web 3
 //instantiate web3 (avoid doing so globally)
@@ -565,102 +565,6 @@ const tttGame = new web3.eth.Contract(ssABI, ssAddress);
 //remember that window.ethereum IS MetaMask
 tttGame.setProvider(window.ethereum);
 ///////////
-
-const enterGame = async () => {
-  let team;
-
-  const valueInput = document.getElementById("value-input");
-  const weiAmt = valueInput.value;
-
-  await tttGame.methods.enterContract().send({
-    from: ethereum.selectedAddress,
-    value: web3.utils.toWei(weiAmt, "ether"),
-    gas: 5000000,
-  });
-
-  const playerTeam = await tttGame.methods
-    .getTeam(ethereum.selectedAddress)
-    .call({ from: ethereum.selectedAddress, gas: 5000000 });
-
-  if (playerTeam == 1) {
-    team = "X";
-  } else if (playerTeam == 2) {
-    team = "Y";
-  }
-  console.log(`${ethereum.selectedAddress}, you are on team ${team}`);
-};
-
-const getTeam = async () => {
-  let team;
-
-  const playerTeam = await tttGame.methods
-    .getTeam(ethereum.selectedAddress)
-    .call({ from: ethereum.selectedAddress, gas: 5000000 });
-
-  if (playerTeam == 1) {
-    team = "X";
-  } else if (playerTeam == 2) {
-    team = "Y";
-  } else {
-    team = "You arent in the game.";
-  }
-
-  console.log(`${ethereum.selectedAddress}, you are on team: ${team}`);
-  return team;
-};
-
-const clickCell = () => {
-  gameCells.forEach((cell) => {
-    // cell.addEventListener("click", () => {console.log(rowNum)});
-    cell.addEventListener("click", clickCellHandler);
-  });
-};
-//helper functions
-
-//back end stuff ONLY
-const clickCellHandler = async (cell) => {
-  //returns cell's x and y
-  let rowNum = cell.target.dataset.x;
-  let colNum = cell.target.dataset.y;
-
-  //back end
-  await tttGame.methods.clickCell(rowNum, colNum).send({
-    from: ethereum.selectedAddress,
-    gas: 5000000,
-  });
-
-  //update team turn
-  await teamTurnHandler();
-
-  //check win condition
-  const winner = await tttGame.methods
-    .getWinner()
-    .call({ from: ethereum.selectedAddress, gas: 5000000 });
-
-  //check if there is a winner
-  if (winner != 0) {
-    //let everybody know who the winner is
-    alert(winner);
-    //clear front end game board
-  }
-};
-
-//displaying team turn
-const teamTurnHandler = async () => {
-  let frontEndTurnText;
-
-  const turnText = await tttGame.methods
-    .getCurrentTurn()
-    .call({ from: ethereum.selectedAddress, gas: 5000000 });
-
-  if (turnText == 1) {
-    frontEndTurnText = "X";
-  } else {
-    frontEndTurnText = "Y";
-  }
-
-  teamTurn.innerHTML = frontEndTurnText;
-};
 
 // displaying the game board
 
@@ -684,6 +588,10 @@ const displayGameBoard = async () => {
     .getTakenCell()
     .call({ from: ethereum.selectedAddress, gas: 5000000 });
 
+  const winner = await tttGame.methods
+    .getWinner()
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
   //THE ARRAY IS GETTING PASSED!!!
   // console.log(gameBoardArray);
 
@@ -697,31 +605,155 @@ const displayGameBoard = async () => {
           .getCellChoice(i)
           .call({ from: ethereum.selectedAddress, gas: 5000000 });
 
-        console.log(icon);
+        // console.log(icon);
 
         if (icon == 1) {
           cell.innerHTML = "X";
         } else if (icon == 2) {
           cell.innerHTML = "Y";
+        } else if (winner != 0) {
+           alert(`The Winner is team ${winner}`);
+           cell.innerHTML = "";
         }
       }
     }
   });
 };
 
+//displaying team turn
+const teamTurnHandler = async () => {
+  let frontEndTurnText;
+
+  const turnText = await tttGame.methods
+    .getCurrentTurn()
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  if (turnText == 1) {
+    frontEndTurnText = "X";
+  } else {
+    frontEndTurnText = "Y";
+  }
+
+  teamTurn.innerHTML = `It is currently: ${frontEndTurnText}'s turn!`;
+};
+
+//display upon loading page
+teamTurnHandler();
+displayGameBoard();
+
+/////
+
+const enterGame = async () => {
+  let team;
+
+  const valueInput = document.getElementById("value-input");
+  const weiAmt = valueInput.value;
+
+  await tttGame.methods.enterContract().send({
+    from: ethereum.selectedAddress,
+    value: web3.utils.toWei(weiAmt, "ether"),
+    gas: 5000000,
+  });
+
+  const playerTeam = await tttGame.methods
+    .getTeam(ethereum.selectedAddress)
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  //DISPLAY TURN
+  teamTurnHandler();
+
+  if (playerTeam == 1) {
+    team = "X";
+  } else if (playerTeam == 2) {
+    team = "Y";
+  }
+  console.log(`${ethereum.selectedAddress}, you are on team ${team}`);
+
+  //refresh gameboard visual
+  displayGameBoard();
+};
+
+const getTeam = async () => {
+  let team;
+
+  const playerTeam = await tttGame.methods
+    .getTeam(ethereum.selectedAddress)
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  if (playerTeam == 1) {
+    team = "X";
+  } else if (playerTeam == 2) {
+    team = "Y";
+  } else {
+    team = "You arent in the game.";
+  }
+
+  console.log(`${ethereum.selectedAddress}, you are on team: ${team}`);
+
+  //refresh gameboard visual
+  displayGameBoard();
+
+  return team;
+};
+
+const clickCell = () => {
+  gameCells.forEach((cell) => {
+    cell.addEventListener("click", clickCellHandler);
+  });
+};
+//helper functions
+
+//back end stuff ONLY
+const clickCellHandler = async (cell) => {
+  //returns cell's x and y
+  let rowNum = cell.target.dataset.x;
+  let colNum = cell.target.dataset.y;
+
+  teamTurn.innerHTML = `WAITING!`;
+
+  //back end
+  await tttGame.methods.clickCell(rowNum, colNum).send({
+    from: ethereum.selectedAddress,
+    gas: 5000000,
+  });
+
+  //update team turn
+  await teamTurnHandler();
+
+  //check win condition
+  const winner = await tttGame.methods
+    .getWinner()
+    .call({ from: ethereum.selectedAddress, gas: 5000000 });
+
+  // //check if there is a winner
+  // if ((await winner) != 0) {
+  //   //let everybody know who the winner is
+  //   console.log(winner);
+  //   //clear front end game board
+  //   // gameCells.forEach((cell) => {
+  //   //   cell.innerHTML = "";
+  //   // });
+  // }
+
+  //refresh gameboard visual
+  displayGameBoard();
+};
+
 //execute functions
 
 gameBtn.addEventListener("click", enterGame);
 teamBtn.addEventListener("click", getTeam);
-teamTurnBtn.addEventListener("click", teamTurnHandler);
-teamTurnHandler();
+// teamTurnBtn.addEventListener("click", teamTurnHandler);
+
 clickCell();
-displayGameBoard();
 
 /*
 to dos:
 1. put web3 instantiation in handler function
 2. Make contract upgradeable
-3. MAKE CODE SIMPLIER! (For example: In soliidity, have an array that already has "X" and "Y" values for each gridspace)
-
+3. Contract: Rest teamPlacementCounter
+4. MAKE CODE SIMPLIER! (For example: In soliidity, have an array that already has "X" and "Y" values for each gridspace)
+5. bugs: 
+  a) waiting is stuck on screen if click cells causes error
+  b) when game ends, the display doesn't match
 */
